@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Schools Past Papers - MSNS.LK</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(18, 26, 43, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+            margin-bottom: 28px;
+        }
+
+        /* Primary Action Application Button */
+        .app-btn-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .application-btn {
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            color: #0f172a !important;
+            padding: 16px 36px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3);
+            text-decoration: none;
+        }
+
+        .application-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(56, 189, 248, 0.45);
+            background: linear-gradient(135deg, #7dd3fc 0%, #0369a1 100%);
+        }
+
+        /* Grade Selection Navigation Grid */
+        .grade-select-heading {
+            color: #38bdf8;
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .grade-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .grade-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f8fafc;
+            padding: 14px 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .grade-btn:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+        }
+
+        .grade-btn.active {
+            background: #38bdf8;
+            color: #0f172a;
+            border-color: #38bdf8;
+            box-shadow: 0 8px 20px rgba(56, 189, 248, 0.35);
+        }
+
+        /* Subject Buttons Grid */
+        .subject-title {
+            color: #f8fafc;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        .sub-btn {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: #cbd5e1;
+            padding: 12px 10px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sub-btn:hover {
+            background: #38bdf8;
+            color: #0f172a;
+            border-color: #38bdf8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Floating Back To Top Button */
+        #backToTop {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 25px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background: #38bdf8;
+            color: #0f172a;
+            cursor: pointer;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        #backToTop:hover {
+            background: #ffffff;
+            color: #0284c7;
+            transform: scale(1.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">MSNS</div>
+            <div class="close-icon" id="closeMenu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a href="index.html" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Home
+            </a>
+            <a href="index.html#about" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                About Us
+            </a>
+            <a href="index.html#governing" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                Governing Body
+            </a>
+            <a href="index.html#contact" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                Contact
+            </a>
+            <a href="past.html" class="menu-item active-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Past Papers & Application
+            </a>
+            <a href="history.html" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                History
+            </a>
+            <a href="news.html" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path><path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8V6Z"></path></svg>
+                News
+            </a>
+            <a href="ab.html" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                About developer
+            </a>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header id="top">
+        <div class="header-title">MSNS</div>
+        <div class="nav-icon" id="menuToggle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="3" y="3" width="5" height="8" rx="2.5" />
+                <rect x="10" y="3" width="11" height="8" rx="4" />
+                <rect x="3" y="13" width="5" height="8" rx="2.5" />
+                <rect x="10" y="13" width="11" height="8" rx="3" />
+            </svg>
+        </div>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <div class="content-wrapper">
+
+        <section id="past-papers">
+            <div class="section-title">
+                <span>📚 Past Papers & Application</span>
+            </div>
+
+            <!-- Application Action Button -->
+            <div class="app-btn-container">
+                <a href="#" class="application-btn">
+                    📄 School Application
+                </a>
+            </div>
+
+            <!-- Grade Selection -->
+            <div class="glass-card" id="grade-selection-point">
+                <div class="grade-select-heading">
+                    <span>📌 Please Select Grade</span>
+                </div>
+                
+                <div class="grade-grid">
+                    <div class="grade-btn active" onclick="switchGrade('6')">Grade 6</div>
+                    <div class="grade-btn" onclick="switchGrade('7')">Grade 7</div>
+                    <div class="grade-btn" onclick="switchGrade('8')">Grade 8</div>
+                    <div class="grade-btn" onclick="switchGrade('9')">Grade 9</div>
+                    <div class="grade-btn" onclick="switchGrade('10')">Grade 10</div>
+                    <div class="grade-btn" onclick="switchGrade('11')">Grade 11</div>
+                    <div class="grade-btn" onclick="switchGrade('12')">Grade 12</div>
+                    <div class="grade-btn" onclick="switchGrade('13')">Grade 13</div>
+                </div>
+
+                <!-- Subjects Container -->
+                <!-- Grade 6 -->
+                <div id="tabs-6" class="tab-content active">
+                    <div class="subject-title">
+                        <span>Grade 6 - Subjects</span>
+                    </div>
+                    <div class="subject-grid">
+                        <a href="https://drive.google.com/drive/folders/1WbQi1r2cPLP6FrmJ5JZGu5dATUf2LA_s" target="_blank" class="sub-btn">Art</a>
+                        <a href="https://drive.google.com/drive/folders/1IpXA_bTCENArX6E9waoD26zUHofx8Njh" target="_blank" class="sub-btn">Buddhism</a>
+                        <a href="https://drive.google.com/drive/folders/152wz_iboXMTMRPUOSbGSBzw_QBpVtzki" target="_blank" class="sub-btn">Catholic</a>
+                        <a href="https://drive.google.com/drive/folders/1esmiQ7ORgk3pSli4zY1rd1rh0aXhfxlp" target="_blank" class="sub-btn">Civic</a>
+                        <a href="https://drive.google.com/drive/folders/1yrtjiY7ETL2UveUx0fB9WRILeEy9QUWK" target="_blank" class="sub-btn">Dancing</a>
+                        <a href="https://drive.google.com/drive/folders/1LtcsuDOuNo-cxmtwyi6-CFR61uJcPjzA" target="_blank" class="sub-btn">Drama</a>
+                        <a href="https://drive.google.com/drive/folders/1bX337SV05inPbv3uo8CaJFvpSMPFJLkV" target="_blank" class="sub-btn">English</a>
+                        <a href="https://drive.google.com/drive/folders/1fsKc78LH31JY7bSfY9OfisUui37T3WvM" target="_blank" class="sub-btn">Geography</a>
+                        <a href="https://drive.google.com/drive/folders/15BUrGdDA1PyRltTCF9sVKbT_HKsrXSeJ" target="_blank" class="sub-btn">Health</a>
+                        <a href="https://drive.google.com/drive/folders/1bZN0Z_fmkDriIBb2LYB7EJJEtURDnxSF" target="_blank" class="sub-btn">History</a>
+                        <a href="https://drive.google.com/drive/folders/1OGbxeOOpsFFnc0kQnigKCK0l5LzcMIB3" target="_blank" class="sub-btn">ICT</a>
+                        <a href="https://drive.google.com/drive/folders/1-dX5wVTTNFyJ4xL0tQajjTxsqJm_Bceh" target="_blank" class="sub-btn">Maths</a>
+                        <a href="https://drive.google.com/drive/folders/1YFGs-DkqMnJgtdGfIUoGBnxa80LdnWUm" target="_blank" class="sub-btn">Music</a>
+                        <a href="https://drive.google.com/drive/folders/1Ic-gvbhfYP1-7eGjdlScEXRtNZgHJlE_" target="_blank" class="sub-btn">Science</a>
+                        <a href="https://drive.google.com/drive/folders/1_iIIPBYbUbh4Re3-nddhVvF7DUYKA3Ns" target="_blank" class="sub-btn">Sinhala</a>
+                        <a href="https://drive.google.com/drive/folders/1gWDAUupmpMGEK98vqD1CnpWlz2IijJaj" target="_blank" class="sub-btn">Tamil</a>
+                    </div>
+                </div>
+
+                <!-- Grade 7 -->
+                <div id="tabs-7" class="tab-content">
+                    <div class="subject-title">
+                        <span>Grade 7 - Subjects</span>
+                    </div>
+                    <div class="subject-grid">
+                        <a href="https://drive.google.com/drive/folders/11CrEndXmf8WxOlKOQ9eYcTMv-Jh21iqh" target="_blank" class="sub-btn">Art</a>
+                        <a href="https://drive.google.com/drive/folders/1lKioI_Et1lmPVUWTmM0QGzxU1N7FYnoH" target="_blank" class="sub-btn">Buddhism</a>
+                        <a href="https://drive.google.com/drive/folders/12N-M_SuD6LDlQPRyfoNCG8PrMhByeQZA" target="_blank" class="sub-btn">Catholic</a>
+                        <a href="https://drive.google.com/drive/folders/18vFg8nKxnRwpdycFLaN2ziFusGIcjk8-" target="_blank" class="sub-btn">Civic</a>
+                        <a href="https://drive.google.com/drive/folders/1GWWwv6Q1XS0qCMMu9Qr7TyDPhGjDSIKt" target="_blank" class="sub-btn">Dancing</a>
+                        <a href="https://drive.google.com/drive/folders/1NlYRhg8xhxfSQZ27PsKJ8RPpi3oLDxce" target="_blank" class="sub-btn">Drama</a>
+                        <a href="https://drive.google.com/drive/folders/1VmY0Oh8iDVNr1MQ_ZBItnqGxiBbYx1Kv" target="_blank" class="sub-btn">English</a>
+                        <a href="https://drive.google.com/drive/folders/1rmvdDvZd3LNnFRUw2DcbfNB6vPIVsLwZ" target="_blank" class="sub-btn">Geography</a>
+                        <a href="https://drive.google.com/drive/folders/1Q5OcJJtieb5_Mq_uGpa2aAdNysDHxeiv" target="_blank" class="sub-btn">Health</a>
+                        <a href="https://drive.google.com/drive/folders/1tjsohRjpzryFev7uAch4U-lXy3XxGYKN" target="_blank" class="sub-btn">History</a>
+                        <a href="https://drive.google.com/drive/folders/1GtfcwcKm6bhLoS3SjbYgXSUnmfqWDlzj" target="_blank" class="sub-btn">ICT</a>
+                        <a href="https://drive.google.com/drive/folders/1wQpcJUZeWE6s743jCepYQYmUSzliCtfD" target="_blank" class="sub-btn">Maths</a>
+                        <a href="https://drive.google.com/drive/folders/1zLdotY50gtlgUbvzAIlnWBbSGUd6m01W" target="_blank" class="sub-btn">Music</a>
+                        <a href="https://drive.google.com/drive/folders/1kMK7MjTBpM108_Q6WO924jxTE5JCD6M9" target="_blank" class="sub-btn">Science</a>
+                        <a href="https://drive.google.com/drive/folders/1TCk68Fn-LAK2dwSbULMsrlyjAB3UUE5m" target="_blank" class="sub-btn">Sinhala</a>
+                        <a href="https://drive.google.com/drive/folders/1jp7DY8QfzDq-XAk-lqD2P4g-UFhQ3I4a" target="_blank" class="sub-btn">Tamil</a>
+                    </div>
+                </div>
+
+                <!-- Grade 8 -->
+                <div id="tabs-8" class="tab-content">
+                    <div class="subject-title">
+                        <span>Grade 8 - Subjects</span>
+                    </div>
+                    <div class="subject-grid">
+                        <a href="https://drive.google.com/drive/folders/1j0IHzBJKFMjr3BAvgW1s7xXNljx3aWC1" target="_blank" class="sub-btn">Art</a>
+                        <a href="https://drive.google.com/drive/folders/1IbLoO87kXklEw2BMojAG0SNxguqCxVPg" target="_blank" class="sub-btn">Buddhism</a>
+                        <a href="https://drive.google.com/drive/folders/1nlGL-n5ln3rxh9TCzDbv4iQvFuIk_TgH" target="_blank" class="sub-btn">Catholic</a>
+                        <a href="https://drive.google.com/drive/folders/17u7O8Y3xxiY1Jz5dFhoilJRIGoSv1rFK" target="_blank" class="sub-btn">Civic</a>
+                        <a href="https://drive.google.com/drive/folders/1ZCX5t6hPDjgLEALgDdtVeF4Ag1Wj_A83" target="_blank" class="sub-btn">Dancing</a>
+                        <a href="https://drive.google.com/drive/folders/188ZSTV9EVEAQYmcnAix1m9a9aDJUkSTQ" target="_blank" class="sub-btn">Drama</a>
+                        <a href="https://drive.google.com/drive/folders/1fpxburAIH2-4gxzduJVdmGtFta5xztfk" target="_blank" class="sub-btn">English</a>
+                        <a href="https://drive.google.com/drive/folders/1PJbx79BGI5bBFVk-Ytgf20YIz2xkGgeY" target="_blank" class="sub-btn">Geography</a>
+                        <a href="https://drive.google.com/drive/folders/1ah-zokfrumeZKGovnXjM51XqONGj9uV5" target="_blank" class="sub-btn">Health</a>
+                        <a href="https://drive.google.com/drive/folders/1Rv9yOVCre_v3-lOTrEv-d1nJ4l19UWN6" target="_blank" class="sub-btn">History</a>
+                        <a href="https://drive.google.com/drive/folders/12xwguBpNH9jGOPCZ1XnaHa6-7KOcxZD2" target="_blank" class="sub-btn">ICT</a>
+                        <a href="https://drive.google.com/drive/folders/1I_Omug04Tm729rpnzXn02tFAHHpJ0q03" target="_blank" class="sub-btn">Maths</a>
+                        <a href="https://drive.google.com/drive/folders/1E6KAPrhHfBTX1taYOIJ49-89Gp99tbj3" target="_blank" class="sub-btn">Music</a>
+                        <a href="https://drive.google.com/drive/folders/14HrgBgbca5TOaAWjrgDvPgG5x9mLx9U2" target="_blank" class="sub-btn">Science</a>
+                        <a href="https://drive.google.com/drive/folders/1DVbwjAz_Sb5Cbd6iguS8XwhwAQoFKBx9" target="_blank" class="sub-btn">Sinhala</a>
+                        <a href="https://drive.google.com/drive/folders/1l6LIosH35md8_aKbHJqxsZ7yX1ayX07S" target="_blank" class="sub-btn">Tamil</a>
+                    </div>
+                </div>
+
+                <!-- Grade 9 -->
+                <div id="tabs-9" class="tab-content">
+                    <div class="subject-title">
+                        <span>Grade 9 - Subjects</span>
+                    </div>
+                    <div class="subject-grid">
+                        <a href="https://drive.google.com/drive/folders/1Ld95aQres015HnbLxJNXEgOyAzSpvWoL" target="_blank" class="sub-btn">Art</a>
+                        <a href="https://drive.google.com/drive/folders/1Auh45ri5FZWCN65pLQcbcXwhLZpgugbz" target="_blank" class="sub-btn">Buddhism</a>
+                        <a href="https://drive.google.com/drive/folders/1hJjQ-cmEiNGGd69MHRjwdpW62aqWg8HA" target="_blank" class="sub-btn">Catholic</a>
+                        <a href="https://drive.google.com/drive/folders/1FNUJ-jDSk5WuJagDAPVkywlaVxxlfBqa" target="_blank" class="sub-btn">Civic</a>
+                        <a href="https://drive.google.com/drive/folders/11cAbltNpgkcnsahZmcQ7MCl86ShwUrRj" target="_blank" class="sub-btn">Dancing</a>
+                        <a href="https://drive.google.com/drive/folders/13qFln5p-mt5XEiv-kTU-6SdPOh8e7INS" target="_blank" class="sub-btn">Drama</a>
+                        <a href="https://drive.google.com/drive/folders/1zUUEcBsCxRzN_pKbnMyYouo0tbA3rKTa" target="_blank" class="sub-btn">English</a>
+                        <a href="https://drive.google.com/drive/folders/1AGHA-nP7dH7YJkvKQCH_pUSxk1r0LbjT" target="_blank" class="sub-btn">Geography</a>
+                        <a href="https://drive.google.com/drive/folders/1MTCYIxF3wOWHUbyCeVvSMg1Z8QGkyI9f" target="_blank" class="sub-btn">Health</a>
+                        <a href="https://drive.google.com/drive/folders/1snT3v8HeQ51ONO5xmhkqWibfdThZ2tDv" target="_blank" class="sub-btn">History</a>
+                        <a href="https://drive.google.com/drive/folders/1uZf9tx8lWP0M2rwc-CAD3f_1tT_gOoRs" target="_blank" class="sub-btn">ICT</a>
+                        <a href="https://drive.google.com/drive/folders/1ao6kbZTdCswJeDgOS_EqxjKGUleiesSc" target="_blank" class="sub-btn">Maths</a>
+                        <a href="https://drive.google.com/drive/folders/1LMVFxFqHga0GCjUWDstw99tfFX3VU3Pe" target="_blank" class="sub-btn">Music</a>
+                        <a href="https://drive.google.com/drive/folders/1WB4T_M4ZPfzTcqnBJZWa8425VeV7Qtik" target="_blank" class="sub-btn">Science</a>
+                        <a href="https://drive.google.com/drive/folders/19iXmlNryVGdOcb5qcGQsSBIoK_P6LLvB" target="_blank" class="sub-btn">Sinhala</a>
+                        <a href="https://drive.google.com/drive/folders/1qApSAQrR5BqN7HShTB6shO4Caa0TCBaP" target="_blank" class="sub-btn">Tamil</a>
+                    </div>
+                </div>
+
+                <!-- Grade 10 -->
+                <div id="tabs-10" class="tab-content">
+                    <div class="subject-title">
+                        <span>Grade 10 - Subjects</span>
+                    </div>
+                    <div class="subject-grid">
+                        <a href="https://drive.google.com/drive/folders/1C0gzvi8rzsWq3GK257zcx3RmQ7hUrKdi" target="_blank" class="sub-btn">Sinhala</a>
+                        <a href="https://drive.google.com/drive/folders/1Kd7PLWrUNzZ4_4DCq_eYNsOS3wAPMDlI" target="_blank" class="sub-btn">Maths</a>
+                        <a href="https://drive.google.com/drive/folders/1nnUm40uF7AdPbCHkKOPJkQ3zFaxllIC-" target="_blank" class="sub-btn">Science</a>
+                        <a href="https://drive.google.com/drive/folders/1ElF0HLRFShHkpkCyHCH31pUPlRZl9T-F" target="_blank" class="sub-btn">Buddhism</a>
+                        <a href="https://drive.google.com/drive/folders/1OxejmycjmWDI8fNXOJ4eoeccFy4VTixR" target="_blank" class="sub-btn">Catholic</a>
+                        <a href="https://drive.google.com/drive/folders/1OGvtAU06tvkiCGzxtHkpDugtVcJGXXko" target="_blank" class="sub-btn">History</a>
+                        <a href="https://drive.google.com/drive/folders/1Pdx-_vDlBV32AP4V64vPEtOjBEEt7gZJ" target="_blank" class="sub-btn">English</a>
+                        <a href="https://drive.google.com/drive/folders/1Qy-0EYP1aBqC12duO28hqQvCXs_CP_qG" target="_blank" class="sub-btn">Commerce</a>
+                        <a href="https://drive.google.com/drive/folders/15CLGqOaHHnKq0mT89YAf6xHhtSvFIthl" target="_blank" class="sub-btn">Japanese</a>
+                        <a href="https://drive.google.com/drive/folders/1S_88RI52pvdAB1h4gcy2efTrRCqZYoA4" target="_blank" class="sub-btn">Tamil</a>
+                        <a href="https://drive.google.com/drive/folders/1pmpm_nxmYcoeWUWn486Vpxbwln-UwDFr" target="_blank" class="sub-btn">Korean</a>
+                        <a href="https://drive.google.com/drive/folders/1UNEmP_xSHRzKUNqjWWwbmWoIpvsEPHRi" target="_blank" class="sub-btn">Civic</a>
+                        <a href="https://drive.google.com/drive/folders/1Rop_pLwlOT2g_slx41KFhshHrWXMW_b0" target="_blank" class="sub-btn">Art</a>
+                        <a href="https://drive.google.com/drive/folders/12e7GKc-Zno7-IqJ-Lb3aUus5G3UPsLDk" target="_blank" class="sub-btn">Music</a>
+                        <a href="https://drive.google.com/drive/folders/1SGLfrMRiqESqpOhY5bJn_5x4GeSr0cXY" target="_blank" class="sub-btn">Drama</a>
+                        <a href="https://drive.google.com/drive/folders/1xH_HjD6kNkMKXQxJKaLAA1-scNBWk4s7" target="_blank" class="sub-btn">Dancing</a>
+                        <a href="https://drive.google.com/drive/folders/1TxtXvQ9pQr8oHN7TOdGSfQTRnIJTwPnn" target="_blank" class="sub-btn">Sinhala Literature</a>
+                        <a href="https://drive.google.com/drive/folders/1ByIJUYmGPZJ--A5ZB-qKfiDCH3HFj21d" target="_blank" class="sub-btn">TEC</a>
+                        <a href="https://drive.google.com/drive/folders/1iolzCGESmvzWGJgZa95s4VSvOWv_34DL" target="_blank" class="sub-btn">ICT</a>
+                        <a href="https://drive.google.com/drive/folders/1yY2fqRDXqgfyfh_P5Dn3ef3KU-0D4RaU" target="_blank" class="sub-btn">Health</a>
+                    </div>
+                </div>
+
+                <!-- Grade 11 -->
+                <div id="tabs-11" class="tab-content">
+                    <div class="subject-title">
+                        <span>Grade 11 - Subjects</span>
+                    </div>
+                    <div class="subject-grid">
+                        <a href="https://drive.google.com/drive/folders/11KlVRvjDTznrhAkLwDzLaBrAxslpqIt_" target="_blank" class="sub-btn">Sinhala</a>
+                        <a href="https://drive.google.com/drive/folders/1snZKhbyDcb27vjtn7uQmLvVE0VZxI6rd" target="_blank" class="sub-btn">Maths</a>
+                        <a href="https://drive.google.com/drive/folders/1I-FajI7aNp911eeyTcWn296T911YMYq_" target="_blank" class="sub-btn">Science</a>
+                        <a href="https://drive.google.com/drive/folders/1u52DSZGmplFwMl7T52qjFZCMVmQBu7uj" target="_blank" class="sub-btn">Buddhism</a>
+                        <a href="https://drive.google.com/drive/folders/16dgpAaKss1S4qlbt0_0bpVcb8Afh9oaP" target="_blank" class="sub-btn">Catholic</a>
+                        <a href="https://drive.google.com/drive/folders/1A5MwW4GQX-PFhzeKBzRJU1RJSPflhotS" target="_blank" class="sub-btn">History</a>
+                        <a href="https://drive.google.com/drive/folders/1bpabnzT0ma3xPN8qdTaN84rpVM8Cq3ue" target="_blank" class="sub-btn">English</a>
+                        <a href="https://drive.google.com/drive/folders/1K_gEG7fBNvBIjuSZLsSATIDCgKkbu3Z_" target="_blank" class="sub-btn">Commerce</a>
+                        <a href="https://drive.google.com/drive/folders/1RzairjVHW11rbOCxk3f28kEUmAI0YBkJ" target="_blank" class="sub-btn">Japanese</a>
+                        <a href="https://drive.google.com/drive/folders/1SnDf4nfdz-QKwqfbkfzo0d398XbCUFC9" target="_blank" class="sub-btn">Tamil</a>
+                        <a href="https://drive.google.com/drive/folders/1BS4a21igWdkO8SnzVBl6qMUoItKQywS9" target="_blank" class="sub-btn">Korean</a>
+                        <a href="https://drive.google.com/drive/folders/1eVfwcSZZL62-7mD2ffgltihDZ524oqwD" target="_blank" class="sub-btn">Civic</a>
+                        <a href="https://drive.google.com/drive/folders/1dKbvvfPpvm82Sq4j4yKwIZ0Xd7p3un2_" target="_blank" class="sub-btn">Art</a>
+                        <a href="https://drive.google.com/drive/folders/1Jzursnc7kJjcgnbc1KniWk4zynAGfRWJ" target="_blank" class="sub-btn">Music</a>
+                        <a href="https://drive.google.com/drive/folders/14P9QKPWknoZRPkZUIjjDYSnZWe_6qJPt" target="_blank" class="sub-btn">Drama</a>
+                        <a href="https://drive.google.com/drive/folders/1WRuMtJvjEhWNMXwZO4dx0M7_5uKS5yww" target="_blank" class="sub-btn">Dancing</a>
+                        <a href="https://drive.google.com/drive/folders/1UocaA3anog6i_gnRmAj0aKwGaRC2koUa" target="_blank" class="sub-btn">Sinhala Literature</a>
+                        <a href="https://drive.google.com/drive/folders/1AsJdKfK-OvgUlf1zeUhQXIcgPncpjvH7" target="_blank" class="sub-btn">TEC</a>
+                        <a href="https://drive.google.com/drive/folders/1T9XH2Af9eijn7CTYAgVOPTVDf6gFuBBm" target="_blank" class="sub-btn">ICT</a>
+                        <a href="https://drive.google.com/drive/folders/1Ki9oIzjgB1Du50esf3LsfFnpruc_DIhq" target="_blank" class="sub-btn">Health</a>
+                    </div>
+                </div>
+
+                <!-- Grade 12 -->
+                <div id="tabs-12" class="tab-content">
+                    <div class="subject-title">
+                        <span>Grade 12 - Subjects</span>
+                    </div>
+                    <div class="subject-grid">
+                        <a href="https://drive.google.com/drive/folders/1diA20ClLqhrhFharc9bcIwZwhGnSGhSy" target="_blank" class="sub-btn">Art</a>
+                        <a href="https://drive.google.com/drive/folders/1Vre1QfH5q7esNKT4R1Hhg5IcKDbFTkyf" target="_blank" class="sub-btn">Dancing</a>
+                        <a href="https://drive.google.com/drive/folders/1QI7ZaNhw4ClJNyHgHLGutDBPpSZXQ7Sf" target="_blank" class="sub-btn">Drama</a>
+                        <a href="https://drive.google.com/drive/folders/1lqPMCw4i91bZTxc1UF6G2P4LbQL6pJyl" target="_blank" class="sub-btn">Music</a>
+                        <a href="https://drive.google.com/drive/folders/1113p-sYWBFSHio7OF0t9Mx8r5vFpHZl2" target="_blank" class="sub-btn">Political</a>
+                        <a href="https://drive.google.com/drive/folders/1hdqZgX0S2KfYGAyEvR9xNektaM_fkINY" target="_blank" class="sub-btn">Econ</a>
+                        <a href="https://drive.google.com/drive/folders/16oDzqCJCHgm5E_JA6xUo_RIfYLVcPm_s" target="_blank" class="sub-btn">BC</a>
+                        <a href="https://drive.google.com/drive/folders/1pP6M5TvAnlaie_kPGdWIqxjTwCycgKtq" target="_blank" class="sub-btn">Sinhala</a>
+                        <a href="https://drive.google.com/drive/folders/1qYLqAqnDtfNjXYyye0x5TooVkEicczQv" target="_blank" class="sub-btn">Japanese</a>
+                        <a href="https://drive.google.com/drive/folders/1qFuiHgynZZ1aWIFw_wOfk3NXPfoGJDAe" target="_blank" class="sub-btn">Korean</a>
+                        <a href="https://drive.google.com/drive/folders/1hcTtdsScfy2VKsFJ5Gwbxan2g76SuMkn" target="_blank" class="sub-btn">Biology</a>
+                        <a href="https://drive.google.com/drive/folders/1ycFmyFWISByP3WYCVpFQoKWry5s8nRkw" target="_blank" class="sub-btn">Chemistry</a>
+                        <a href="https://drive.google.com/drive/folders/1XcVjx-Y6SpYFk0WHUUdpqzCg7E9bDCK_" target="_blank" class="sub-btn">Physics</a>
+                        <a href="https://drive.google.com/drive/folders/11-rKqTyNceg6uYK6eWXS_-r2F0M7_dbp" target="_blank" class="sub-btn">Combine Maths</a>
+                        <a href="https://drive.google.com/drive/folders/1zG9nwmGpBTvW7IWGHn3_QL39tTyqVU2d" target="_blank" class="sub-btn">IT</a>
+                        <a href="https://drive.google.com/drive/folders/1emwDnvq0zpMn2XPjA2KXOHHjXYnMYn8r" target="_blank" class="sub-btn">ET</a>
+                        <a href="https://drive.google.com/drive/folders/1hIUPYb1WtFHojuLdxRKslepFp8EVL6mk" target="_blank" class="sub-btn">SFT</a>
+                        <a href="https://drive.google.com/drive/folders/17ICGHVzBf3y0BSPfnbcjfkBXzu-kWbOn" target="_blank" class="sub-btn">Agri</a>
+                        <a href="https://drive.google.com/drive/folders/1p_6SZIALxQcxaOf-W5V_JaS0JJFd8l23" target="_blank" class="sub-btn">BST</a>
+                    </div>
+                </div>
+
+                <!-- Grade 13 -->
+                <div id="tabs-13" class="tab-content">
+                    <div class="subject-title">
+                        <span>Grade 13 - Subjects</span>
+                    </div>
+                    <div class="subject-grid">
+                        <a href="https://drive.google.com/drive/folders/1YWVX4x02EKl3WU60TUIpuLq3SaH7WATT" target="_blank" class="sub-btn">Art</a>
+                        <a href="https://drive.google.com/drive/folders/1MXYxvA1OPW-yfekqe40XwnHmY2kA34V9" target="_blank" class="sub-btn">Dancing</a>
+                        <a href="https://drive.google.com/drive/folders/1xY70YvPINXFIbhzWjPYIEZttRTf78VG_" target="_blank" class="sub-btn">Drama</a>
+                        <a href="https://drive.google.com/drive/folders/14iEDMCI4QHO3qtrjmKhktJLhQrtgtINV" target="_blank" class="sub-btn">Music</a>
+                        <a href="https://drive.google.com/drive/folders/1UBMKDoHPVWSsJUaNgYd5UN9pkT0xi5mv" target="_blank" class="sub-btn">Political</a>
+                        <a href="https://drive.google.com/drive/folders/1C3HJqBe0NIRjVqMma8zcBp4zotTOWkUt" target="_blank" class="sub-btn">Econ</a>
+                        <a href="https://drive.google.com/drive/folders/1v19ydmGlpiJ63DrE-1nHreWcRTmvgYjU" target="_blank" class="sub-btn">BC</a>
+                        <a href="https://drive.google.com/drive/folders/1a6v5I7EYQIVXFcay3wO5-3lP_d1A8TPA" target="_blank" class="sub-btn">Sinhala</a>
+                        <a href="https://drive.google.com/drive/folders/1znjVhxwaJ9sTALWz_VnUq2n5iNsjg3Rv" target="_blank" class="sub-btn">Japanese</a>
+                        <a href="https://drive.google.com/drive/folders/1oBbdCi6cJ3p1idQ0RChF1WT2UsSwWltF" target="_blank" class="sub-btn">Korean</a>
+                        <a href="https://drive.google.com/drive/folders/1eTaiQnVyIIyZkjwkXsMEx7_Ko2w0Uomk" target="_blank" class="sub-btn">Biology</a>
+                        <a href="https://drive.google.com/drive/folders/1ZOPgsZIljgH1gY0Ju4KAjWtA9FJlkEAx" target="_blank" class="sub-btn">Chemistry</a>
+                        <a href="https://drive.google.com/drive/folders/1_vmd3_UWXtYySNohNg0sgTAibRlVv1dk" target="_blank" class="sub-btn">Physics</a>
+                        <a href="https://drive.google.com/drive/folders/1n6C3SjOM4sv2qGTmjkNwy31-tWp9dJFd" target="_blank" class="sub-btn">Combine Maths</a>
+                        <a href="https://drive.google.com/drive/folders/1x8SRYRXj2dV_soxG68AIy_qgiaVESdf1" target="_blank" class="sub-btn">IT</a>
+                        <a href="https://drive.google.com/drive/folders/1LNQA4CkYQQsvRmsdW3kebRLDL6OJG62r" target="_blank" class="sub-btn">ET</a>
+                        <a href="https://drive.google.com/drive/folders/1V-Fg7vgAEk785DHlaFsMmOdUDmzcDUgP" target="_blank" class="sub-btn">SFT</a>
+                        <a href="https://drive.google.com/drive/folders/1oBSDfZz1KmhTljoPRj2YCL7743itMmcl" target="_blank" class="sub-btn">Agri</a>
+                        <a href="https://drive.google.com/drive/folders/1mRxyv1UGnvjREKaTrQd205PNbxrdGQy9" target="_blank" class="sub-btn">BST</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Scroll To Top Button -->
+    <button id="backToTop" title="Go to top">↑</button>
+
+    <!-- Footer -->
+    <footer>
+        <p class="cr-text">© 2026 A/Maithripala Senanayake C.C</p>
+        <p class="al-text">MSNS.LK</p>
+        <p class="credit-text">
+            Editor: K.D.G.S.M. DENIYEGEDARA
+        </p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        /* Mobile Navigation Overlay Toggle */
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const sidebar = document.getElementById('sidebar');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            menuOverlay.classList.add('active');
+        });
+
+        const hideMenuHub = () => {
+            sidebar.classList.remove('active');
+            menuOverlay.classList.remove('active');
+        };
+
+        closeMenu.addEventListener('click', hideMenuHub);
+        menuOverlay.addEventListener('click', hideMenuHub);
+
+        /* Tab Switcher Logic */
+        function switchGrade(gradeNum) {
+            // Remove active status from all grade buttons
+            document.querySelectorAll('.grade-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Hide all tab content elements
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Activate current grade button & show target tab
+            event.currentTarget.classList.add('active');
+            const targetTab = document.getElementById('tabs-' + gradeNum);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+        }
+
+        /* Back to Top Floating Action */
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) {
+                backToTopBtn.style.display = "flex";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        };
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+</body>
+</html>
